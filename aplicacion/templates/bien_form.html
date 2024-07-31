@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f0f2f5;
+  }
+
+  .form-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: 300;
+    font-size: 2.5em;
+  }
+
+  .form-section {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+
+  .form-section h2 {
+    background-color: #3498db;
+    color: #fff;
+    padding: 15px 20px;
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 400;
+  }
+
+  .form-content {
+    padding: 20px;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -10px;
+  }
+
+  .form-group {
+    flex: 1 1 calc(50% - 20px);
+    margin: 10px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: 500;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+  }
+
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="date"]:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+
+  textarea {
+    height: 100px;
+    resize: vertical;
+  }
+
+  .caracteristica-item {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  .caracteristica-item input,
+  .caracteristica-item select {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.1s;
+  }
+
+  button:hover {
+    background-color: #2980b9;
+  }
+
+  button:active {
+    transform: translateY(1px);
+  }
+
+  .remove-caracteristica {
+    background-color: #e74c3c;
+  }
+
+  .remove-caracteristica:hover {
+    background-color: #c0392b;
+  }
+
+  #addCaracteristica {
+    background-color: #2ecc71;
+    margin-top: 10px;
+  }
+
+  #addCaracteristica:hover {
+    background-color: #27ae60;
+  }
+
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+  }
+
+  .submit-btn:hover {
+    background-color: #2980b9;
+  }
+</style>
+
+<div class="form-container">
+    <h1>{% if object %}Editar{% else %}Crear{% endif %} Bien</h1>
+    <form method="post" enctype="multipart/form-data" id="bienForm">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <h2>Información General</h2>
+            <div class="form-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" value="{{ object.nombre|default:'' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="grupo">Grupo:</label>
+                        <input type="number" id="grupo" name="grupo" value="{{ object.grupo|default:'' }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sub_grupo">Sub Grupo:</label>
+                        <input type="number" id="sub_grupo" name="sub_grupo" value="{{ object.sub_grupo|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="seccion">Sección:</label>
+                        <input type="number" id="seccion" name="seccion" value="{{ object.seccion|default:'' }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Detalles de Movimiento</h2>
+            <div class="form-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="concepto_de_movimiento">Concepto de Movimiento:</label>
+                        <input type="number" id="concepto_de_movimiento" name="concepto_de_movimiento" value="{{ object.concepto_de_movimiento|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" id="cantidad" name="cantidad" value="{{ object.cantidad|default:'' }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Inventario</h2>
+            <div class="form-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="stock">Stock:</label>
+                        <input type="number" id="stock" name="stock" value="{{ object.stock|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="stock_minimo">Stock Mínimo:</label>
+                        <input type="number" id="stock_minimo" name="stock_minimo" value="{{ object.stock_minimo|default:'' }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="stock_maximo">Stock Máximo:</label>
+                        <input type="number" id="stock_maximo" name="stock_maximo" value="{{ object.stock_maximo|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="numero_de_identificacion">Número de Identificación:</label>
+                        <input type="text" id="numero_de_identificacion" name="numero_de_identificacion" value="{{ object.numero_de_identificacion|default:'' }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Características Físicas</h2>
+            <div class="form-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="marca">Marca:</label>
+                        <input type="text" id="marca" name="marca" value="{{ object.marca|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo">Modelo:</label>
+                        <input type="text" id="modelo" name="modelo" value="{{ object.modelo|default:'' }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tipo_de_bien">Tipo de Bien:</label>
+                        <input type="text" id="tipo_de_bien" name="tipo_de_bien" value="{{ object.tipo_de_bien|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="numero_inventario">Número de Inventario:</label>
+                        <input type="text" id="numero_inventario" name="numero_inventario" value="{{ object.numero_inventario|default:'' }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="color">Color:</label>
+                        <input type="text" id="color" name="color" value="{{ object.color|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="material">Material:</label>
+                        <input type="text" id="material" name="material" value="{{ object.material|default:'' }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tipo">Tipo:</label>
+                        <input type="text" id="tipo" name="tipo" value="{{ object.tipo|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="serie">Serie:</label>
+                        <input type="text" id="serie" name="serie" value="{{ object.serie|default:'' }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Ubicación y Estado</h2>
+            <div class="form-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ubicacion_actual">Ubicación Actual:</label>
+                        <select id="ubicacion_actual" name="ubicacion_actual">
+                            {% for departamento in departamentos %}
+                                <option value="{{ departamento.departamento_id }}" {% if object.ubicacion_actual.departamento_id == departamento.departamento_id %}selected{% endif %}>
+                                    {{ departamento.nombre_del_departamento }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado_actual">Estado Actual:</label>
+                        <select id="estado_actual" name="estado_actual">
+                            <option value="activo" {% if object.estado_actual == 'activo' %}selected{% endif %}>Activo</option>
+                            <option value="en_revision" {% if object.estado_actual == 'en_revision' %}selected{% endif %}>En Revisión</option>
+                            <option value="resguardado" {% if object.estado_actual == 'resguardado' %}selected{% endif %}>Resguardado</option>
+                            <option value="desincorporado" {% if object.estado_actual == 'desincorporado' %}selected{% endif %}>Desincorporado</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Información Adicional</h2>
+            <div class="form-content">
+                <div class="form-group">
+                    <label for="observacion">Observación:</label>
+                    <textarea id="observacion" name="observacion">{{ object.observacion|default:'' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="conclusion">Conclusión:</label>
+                    <textarea id="conclusion" name="conclusion">{{ object.conclusion|default:'' }}</textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fecha_de_registro">Fecha de Registro:</label>
+                        <input type="date" id="fecha_de_registro" name="fecha_de_registro" value="{{ object.fecha_de_registro|date:'Y-m-d'|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="incorporacion">Incorporación:</label>
+                        <input type="number" id="incorporacion" name="incorporacion" value="{{ object.incorporacion|default:'' }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="desincorporacion">Desincorporación:</label>
+                        <input type="number" id="desincorporacion" name="desincorporacion" value="{{ object.desincorporacion|default:'' }}">
+                    </div>
+                <div class="form-group">
+                    <label for="archivo_multimedia">Archivo Multimedia:</label>
+                    <input type="text" id="archivo_multimedia" name="archivo_multimedia" value="{{ object.archivo_multimedia|default:'' }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Características</h2>
+            <div class="form-content">
+                <div id="caracteristicas">
+                    {% for caracteristica in caracteristicas %}
+                        <div class="caracteristica-item">
+                            <input type="text" name="descripcion[]" value="{{ caracteristica.descripcion }}" placeholder="Descripción">
+                            <select name="estado[]">
+                                <option value="bueno" {% if caracteristica.estado == 'bueno' %}selected{% endif %}>Bueno</option>
+                                <option value="malo" {% if caracteristica.estado == 'malo' %}selected{% endif %}>Malo</option>
+                                <option value="regular" {% if caracteristica.estado == 'regular' %}selected{% endif %}>Regular</option>
+                            </select>
+                            <button type="button" class="remove-caracteristica">-</button>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" id="addCaracteristica">+ Agregar Característica</button>
+            </div>
+        </div>
+        
+        <button type="submit" class="submit-btn">Guardar</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const caracteristicasContainer = document.getElementById('caracteristicas');
+    const addButton = document.getElementById('addCaracteristica');
+
+    addButton.addEventListener('click', function() {
+        const newItem = document.createElement('div');
+        newItem.className = 'caracteristica-item';
+        newItem.innerHTML = `
+            <input type="text" name="descripcion[]" placeholder="Descripción">
+            <select name="estado[]">
+                <option value="bueno">Bueno</option>
+                <option value="malo">Malo</option>
+                <option value="regular">Regular</option>
+            </select>
+            <button type="button" class="remove-caracteristica">-</button>
+        `;
+        caracteristicasContainer.appendChild(newItem);
+    });
+
+    caracteristicasContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-caracteristica')) {
+            e.target.parentElement.remove();
+        }
+    });
+});
+</script>
+
+{% endblock %}

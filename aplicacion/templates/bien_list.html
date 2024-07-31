@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    #tblBienes {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    #tblBienes th, #tblBienes td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #tblBienes th {
+        background-color: #007bff;
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    #tblBienes tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    #tblBienes tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .estatus-title {
+        color: #007bff;
+        font-weight: bold;
+        font-size: 2rem;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 1200px; /* Ancho máximo ajustado */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .btn-download {
+        display: inline-block;
+        font-weight: 400;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-download:hover {
+        background-color: #0056b3;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-info, .btn-danger {
+        font-size: 0.875rem;
+        border-radius: 5px;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        border: none;
+    }
+
+    .btn-info:hover {
+        background-color: #138496;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Listado de <span class="estatus-title">Bienes</span></h1>
+    <a href="{% url 'bien_create' %}" class="btn btn-primary mb-3">Nuevo Bien</a>
+    <div class="card">
+        <div class="table-responsive">
+            <table id="tblBienes" class="table">
+                <thead>
+                    <tr>
+                        <th class="sortable">Grupo</th>
+                        <th>Subgrupo</th>
+                        <th>Sección</th>
+                        <th class="sortable">Concepto de Movimiento</th>
+                        <th>Cantidad</th>
+                        <th class="sortable">Stock</th>
+                        <th>Número de Identificación</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Incorporaciones</th>
+                        <th>Desincorporación</th>
+                        <th class="sortable">Fecha de Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bien in bienes %}
+                    <tr>
+                        <td>{{ bien.grupo }}</td>
+                        <td>{{ bien.sub_grupo }}</td>
+                        <td>{{ bien.seccion }}</td>
+                        <td>{{ bien.concepto_de_movimiento }}</td>
+                        <td>{{ bien.cantidad }}</td>
+                        <td>{{ bien.stock }}</td>
+                        <td>{{ bien.numero_de_identificacion }}</td>
+                        <td><a href="{% url 'bien_descripcion' bien_id=bien.id_bien %}">{{ bien.nombre }}</a></td>
+                        <td>{{ bien.descripcion }}</td>
+                        <td>{{ bien.incorporacion }}</td>
+                        <td>{{ bien.desincorporacion }}</td>
+                        <td>{{ bien.fecha_de_registro }}</td>
+                        <td>
+                            <a href="{% url 'bien_update' bien.id_bien %}" class="btn btn-sm btn-info">Editar</a>
+                            <a href="{% url 'bien_delete' bien.id_bien %}" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <form action="{% url 'pdf_bienes' %}" method="get" target="_blank">
+        <button type="submit" class="btn-download">Descargar PDF</button>
+    </form>
+</div>
+{% endblock %}

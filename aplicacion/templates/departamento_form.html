@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .container h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-size: 2em;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: 500;
+    }
+
+    input[type="text"], input[type="number"], textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 14px;
+        color: white;
+        background-color: #3498db;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    .btn-secondary {
+        background-color: #7f8c8d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #95a5a6;
+    }
+</style>
+
+<div class="container">
+    <h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Departamento</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'departamento_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .container {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    h1, h2 {
+        text-align: center;
+    }
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 0;
+    }
+    .section {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #ffffff;
+    }
+    .section p {
+        margin: 5px 0;
+        line-height: 1.5;
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    .table th, .table td {
+        border: 1px solid #dee2e6;
+        padding: 10px;
+        text-align: center;
+    }
+    .table th {
+        background-color: #f1f1f1;
+    }
+    .photo {
+        text-align: center;
+    }
+    .photo img {
+        max-width: 100%;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    .footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 1rem;
+    }
+    .data-table {
+        display: table;
+        width: 100%;
+    }
+    .data-row {
+        display: table-row;
+    }
+    .data-cell {
+        display: table-cell;
+        padding: 10px;
+        vertical-align: top;
+    }
+    .btn-edit {
+        display: block;
+        width: 200px;
+        margin: 20px auto;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+    }
+    .btn-edit:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="container">
+    <h1>FICHA TÉCNICA DE BIENES MUEBLES</h1>
+
+    <div class="section">
+        <h2>DATOS BÁSICOS DEL BIEN MUEBLE</h2>
+        <div class="data-table">
+            <div class="data-row">
+                <div class="data-cell"><p><strong>MARCA:</strong> {{ bien.marca }}</p></div>
+                <div class="data-cell"><p><strong>MODELO:</strong> {{ bien.modelo }}</p></div>
+                <div class="data-cell"><p><strong>ITEM:</strong> {{ bien.nombre }}</p></div>
+                <div class="data-cell"><p><strong>N° INV:</strong> {{ bien.numero_inventario }}</p></div>
+            </div>
+            <div class="data-row">
+                <div class="data-cell"><p><strong>COLOR:</strong> {{ bien.color }}</p></div>
+                <div class="data-cell"><p><strong>MATERIAL:</strong> {{ bien.material }}</p></div>
+                <div class="data-cell"><p><strong>TIPO:</strong> {{ bien.tipo }}</p></div>
+                <div class="data-cell"><p><strong>SERIAL:</strong> {{ bien.serie }}</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>ESTADO</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Bueno</th>
+                    <th>Regular</th>
+                    <th>Malo</th>
+                    <th>No Existe</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for caracteristica in caracteristicas %}
+                <tr>
+                    <td>{{ caracteristica.descripcion }}</td>
+                    <td>{% if caracteristica.estado == 'bueno' %}✔️{% endif %}</td>
+                    <td>{% if caracteristica.estado == 'regular' %}✔️{% endif %}</td>
+                    <td>{% if caracteristica.estado == 'malo' %}✔️{% endif %}</td>
+                    <td>{% if caracteristica.estado == 'no existe' %}✔️{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>CONCLUSIÓN</h2>
+        <p>{{ bien.conclusion }}</p>
+    </div>
+
+    <div class="section">
+        <h2>OBSERVACIÓN</h2>
+        <p>{{ bien.observacion }}</p>
+    </div>
+
+    <div class="section">
+        <h2>UBICACIÓN</h2>
+        <p>{{ bien.ubicacion_actual.nombre_del_departamento }}</p>
+    </div>
+
+    <div class="section photo">
+        <h2>MEMORIA FOTOGRÁFICA</h2>
+        {% if bien.archivo_multimedia %}
+        <img src="{{ bien.archivo_multimedia.url }}" alt="Imagen del bien">
+        {% else %}
+        <p>No hay imagen disponible.</p>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'bien_update' bien.id_bien %}" class="btn-edit">Editar Bien</a>
+</div>
+{% endblock %}

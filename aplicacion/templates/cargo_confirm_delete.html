@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .confirm-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .confirm-container h1 {
+        color: #e74c3c;
+        margin-bottom: 20px;
+        font-size: 2em;
+    }
+
+    .confirm-container p {
+        color: #555;
+        font-size: 1.2em;
+        margin-bottom: 30px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 14px;
+        color: white;
+        background-color: #e74c3c;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #c0392b;
+    }
+
+    .btn-secondary {
+        background-color: #7f8c8d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #95a5a6;
+    }
+</style>
+
+<div class="confirm-container">
+    <h1>Confirmar Eliminación</h1>
+    <p>¿Estás seguro de que deseas eliminar el cargo "{{ object.nombre }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Eliminar</button>
+        <a href="{% url 'cargo_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

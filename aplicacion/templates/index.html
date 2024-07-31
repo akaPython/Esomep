@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Página de Inicio{% endblock %}
+
+{% block content %}
+<style>
+    /* Estilos para el contenedor principal */
+    .main-container {
+        text-align: center;
+        padding: 50px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        max-width: 800px;
+    }
+
+    /* Estilos para el título principal */
+    h2 {
+        color: #007bff;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    /* Estilos para la navegación */
+    nav {
+        margin-top: 20px;
+    }
+
+    nav ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    nav ul li {
+        display: inline-block;
+        margin: 0 15px;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: #007bff;
+        font-size: 1.2rem;
+        transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+        color: #0056b3;
+    }
+
+    /* Estilos para el mensaje de bienvenida */
+    .welcome-message {
+        font-size: 1.2rem;
+        color: #6c757d;
+        margin-top: 10px;
+    }
+
+    /* Estilos para el botón de inicio de sesión */
+    .login-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .login-button:hover {
+        background-color: #0056b3;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="main-container">
+    <h2>Bienvenido a nuestra página de inicio</h2>
+    <nav>
+        <ul>
+            {% if user.is_authenticated %}
+                <li class="welcome-message">Bienvenido, {{ user.username }}!</li>
+            {% else %}
+                <li><a href="{% url 'login' %}" class="login-button">Iniciar sesión</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

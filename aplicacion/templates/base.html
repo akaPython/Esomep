@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+
+    .logo {
+        width: 60px;
+        height: auto;
+    }
+
+    .nombre-imagen {
+        width: 150px;
+        height: auto;
+        margin-left: 10px;
+    }
+    
+    .logo:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s ease;
+    }
+
+    .dropdown-menu {
+        background-color: #1e1e2d;
+        border: none;
+    }
+
+    .dropdown-item {
+        color: #ffffff;
+    }
+
+    .dropdown-item:hover {
+        background-color: #2a2a3c;
+    }
+
+    .barra-lateral {
+        transition: width 0.3s ease;
+    }
+    
+    .mini-barra-lateral {
+        width: 80px;
+    }
+    
+    .mini-barra-lateral .navegacion ul li a {
+        justify-content: center;
+        padding: 10px 0;
+    }
+    
+    .mini-barra-lateral .navegacion ul li a ion-icon {
+        margin-right: 0;
+        font-size: 22px;
+    }
+    
+    .mini-barra-lateral .navegacion ul li a span,
+    .mini-barra-lateral .dropdown-toggle::after {
+        display: none;
+    }
+    
+    .mini-barra-lateral .dropdown-menu {
+        position: absolute;
+        left: 100%;
+        top: 0;
+    }
+    
+    .navegacion ul li {
+        position: relative;
+    }
+
+    .navegacion ul li a {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        color: #ffffff;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .navegacion ul li a:hover {
+        background-color: #2a2a3c;
+    }
+
+    .navegacion ul li a ion-icon {
+        font-size: 20px;
+        margin-right: 10px;
+    }
+
+    .notification-indicator {
+        width: 10px !important;
+        height: 9px !important;
+        background-color: #ff4757;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        right: 140px;
+    }
+    
+
+    .mini-barra-lateral .notification-indicator {
+        right: 5px;
+    }
+</style>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js" integrity="sha384-+0JXaONBF1AwG5Z3zQ9H8B2NhOeNZz5c5jhiF0qYx3Pmcue1bYtBhq2O5qUsBnlJ" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js" integrity="sha384-KA+8xI/6IvA6CnQ20e3C7zxtP0Fm+z3I4a9DiqPLgBNYGDyrXGfYJn7Q5aIsa6P5" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Esomep</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-6RJ5CgZN85NBX3b0TTe4PHXUqysT9Kp5DD0PVtM6KSpKhAU8icIbtC7tY2tp/jmMDa4z4PpZcm7AJELlrsk8ig==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <div class="menu">
+        <ion-icon name="menu-outline"></ion-icon>
+        <ion-icon name="close-outline"></ion-icon>
+    </div>
+
+    <div class="barra-lateral">
+        <div>
+            <div class="nombre-pagina">
+                <img id="toggle-sidebar" class="logo" src="{% static 'imagenes/logo.png' %}"  />
+                <img src="{% static 'imagenes/logo2.png' %}" class="nombre-imagen" />
+            </div>
+        </div>
+        
+        <div class="linea"></div>
+
+        <nav class="navegacion">
+            <ul>
+                <li>
+                    <a id="inicio" href="{% url 'index' %}">
+                        <ion-icon name="home-outline"></ion-icon>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                {% if user.empleado.es_jefe_bienes %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                        <ion-icon name="cube-outline"></ion-icon>
+                        <span>Bienes</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'bien_list' %}">Lista de Bienes</a></li>
+                        <li><a class="dropdown-item" href="{% url 'bien_create' %}">Agregar Bien</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                        <ion-icon name="list-outline"></ion-icon>
+                        <span>Solicitud</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'crear_solicitud' %}">Nueva Solicitud</a></li>
+                        <li><a class="dropdown-item" href="{% url 'lista_solicitudes' %}">Ver Solicitudes</a></li>
+                    </ul>
+                </li>
+                {% if user.empleado.es_jefe_bienes %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                        <ion-icon name="people-outline"></ion-icon>
+                        <span>Admin</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'empleado_list'%}">Empleados</a></li>
+                        <li><a class="dropdown-item" href="{% url 'departamento_list' %}">Departamentos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'cargo_list' %}">Cargos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'registro' %}">Registro</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                        <ion-icon name="archive-outline"></ion-icon>
+                        <span>Archivo</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Documentos</a></li>
+                        <li><a class="dropdown-item" href="#">Historial</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'ver_notificaciones' %}" class="nav-item">
+                        <ion-icon name="notifications-outline"></ion-icon>
+                        <span>Notificaciones</span>
+                        {% if has_unread_notifications %}
+                        <span class="notification-indicator"></span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'logout' %}" class="nav-item">
+                        <ion-icon name="log-out-outline"></ion-icon>
+                        <span>Cerrar sesión</span>
+                    </a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{% url 'login' %}" class="nav-item">
+                        <ion-icon name="log-in-outline"></ion-icon>
+                        <span>Iniciar sesión</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'registro' %}" class="nav-item">
+                        <ion-icon name="person-add-outline"></ion-icon>
+                        <span>Registrarse</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+
+        <div>
+            <div class="linea"></div>
+        </div>
+
+
+    </div>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        const toggleSidebar = document.getElementById("toggle-sidebar");
+        const barraLateral = document.querySelector(".barra-lateral");
+        const spans = document.querySelectorAll("span");
+        const menu = document.querySelector(".menu");
+        const main = document.querySelector("main");
+        
+        menu.addEventListener("click", () => {
+            barraLateral.classList.toggle("max-barra-lateral");
+            if (barraLateral.classList.contains("max-barra-lateral")) {
+                menu.children[0].style.display = "none";
+                menu.children[1].style.display = "block";
+            } else {
+                menu.children[0].style.display = "block";
+                menu.children[1].style.display = "none";
+            }
+            if (window.innerWidth <= 320) {
+                barraLateral.classList.add("mini-barra-lateral");
+                main.classList.add("min-main");
+                spans.forEach((span) => {
+                    span.classList.add("oculto");
+                });
+            }
+        });
+        
+        toggleSidebar.addEventListener("click", () => {
+            barraLateral.classList.toggle("mini-barra-lateral");
+            main.classList.toggle("min-main");
+            spans.forEach((span) => {
+                span.classList.toggle("oculto");
+            });
+        });
+
+        $.extend($.fn.dataTable.defaults, {
+            language: {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros por página",
+                "sZeroRecords": "No se encontraron resultados",
+                "sInfo": "Mostrando _START_ al _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 al 0 de 0 registros",
+                "sInfoFiltered": "(filtrado de _MAX_ registros en total)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+            lengthMenu: [ [5, 10, 25, 50], [5, 10, 25, 50] ]
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl)
+            })
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tblBienes').DataTable({
+                searching: true
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#estatus-table').DataTable({
+                // Opciones de configuración del DataTable
+            });
+        });
+    </script>
+</body>
+</html>

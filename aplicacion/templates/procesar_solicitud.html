@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Procesar Solicitud</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .radio-group {
+            margin: 20px 0;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        #rechazo {
+            margin-top: 20px;
+        }
+
+        #motivo_rechazo {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Procesar Solicitud #{{ solicitud.id_solicitud }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            <p><strong>Empleado:</strong> {{ solicitud.empleado }}</p>
+            <p><strong>Fecha de Solicitud:</strong> {{ solicitud.fecha_solicitud }}</p>
+            <p><strong>Tipo de Solicitud:</strong> {{ solicitud.tipo_de_solicitud }}</p>
+            <p><strong>Estado Actual:</strong> {{ solicitud.estado_solicitud }}</p>
+
+            <div class="radio-group">
+                <input type="radio" id="aceptar" name="accion" value="aceptar">
+                <label for="aceptar">Aceptar</label><br>
+
+                <input type="radio" id="rechazar" name="accion" value="rechazar">
+                <label for="rechazar">Rechazar</label><br>
+            </div>
+
+            <div id="rechazo" style="display: none;">
+                <label for="motivo_rechazo">Motivo de Rechazo:</label>
+                <input type="text" id="motivo_rechazo" name="motivo_rechazo"><br>
+            </div>
+
+            {% if solicitud.bienes_solicitados.exists %}
+                {% for bien_solicitado in solicitud.bienes_solicitados.all %}
+                    <input type="hidden" name="bien_id" value="{{ bien_solicitado.bien.id_bien }}">
+                {% endfor %}
+            {% endif %}
+
+            <button type="submit">Procesar Solicitud</button>
+        </form>
+    </div>
+
+    <script>
+        document.querySelectorAll('input[name="accion"]').forEach(function(elem) {
+            elem.addEventListener('change', function() {
+                var motivoRechazoDiv = document.getElementById('rechazo');
+                if (this.value === 'rechazar') {
+                    motivoRechazoDiv.style.display = 'block';
+                } else {
+                    motivoRechazoDiv.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}
